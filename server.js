@@ -1,0 +1,27 @@
+import cors from 'cors';
+import 'dotenv/config'; 
+import connectDB from './config/mongodb.js';
+import connectCloudinary from './config/cloudinary.js';
+import userRouter from './routes/userRoute.js';
+import express from 'express';
+import productRouter from './routes/productRoute.js';
+
+//App config
+const app = express();
+const port =process.env.PORT || 4000;
+
+connectDB();
+connectCloudinary();    
+//middleware
+app.use(express.json());
+app.use(cors());    //cors is used to allow the request from the frontend to the backend
+
+//api endpoints
+app.use('/api/user',userRouter)
+app.use('/api/product',productRouter)
+
+app.get('/', (req,res)=>{
+    res.send("API Working");
+})
+
+app.listen(port,()=>console.log('Server start on PORT:'+ port));
